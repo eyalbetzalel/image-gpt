@@ -39,7 +39,7 @@ def parse_arguments():
     parser.add_argument("--clf", action="store_true", help="add a learnable classification head")
 
     # parallelism
-    parser.add_argument("--n_sub_batch", type=int, default=8, help="per-gpu batch size")
+    parser.add_argument("--n_sub_batch", type=int, default=2, help="per-gpu batch size")
     parser.add_argument("--n_gpu", type=int, default=8, help="number of gpus to distribute training across")
 
     # mode
@@ -47,7 +47,7 @@ def parse_arguments():
     parser.add_argument("--sample", action="store_true", help="samples from the model, requires a checkpoint and clusters")
     
     # generate
-    parser.add_argument("--gen_dataset_size", type=int, default=64, help="per-gpu batch size")
+    parser.add_argument("--gen_dataset_size", type=int, default=16, help="per-gpu batch size")
 
     # reproducibility
     parser.add_argument("--seed", type=int, default=42, help="seed for random, np, tf")
@@ -162,7 +162,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     # write to png
         for i in range(n_gpu * n_sub_batch):
             ind = curr_iter + i
-            imwrite(f"{args.save_dir}/sample_{i}.png", samples[ind])
+            imwrite(f"{args.save_dir}/sample_{ind}.png", samples[i])
 
 
 def main(args):
