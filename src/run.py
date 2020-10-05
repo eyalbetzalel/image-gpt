@@ -162,7 +162,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     # write to png
         for i in range(n_gpu * n_sub_batch):
             ind = curr_iter + i
-            imwrite(f"{args.save_dir}/sample_{i}.png", samples_main[ind])
+            imwrite(f"{args.save_dir}/sample_{i}.png", samples[ind])
 
 
 def main(args):
