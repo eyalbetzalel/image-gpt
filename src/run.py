@@ -47,7 +47,7 @@ def parse_arguments():
     parser.add_argument("--sample", action="store_true", help="samples from the model, requires a checkpoint and clusters")
     
     # generate
-    parser.add_argument("--gen_dataset_size", type=int, default=128, help="per-gpu batch size")
+    parser.add_argument("--gen_dataset_size", type=int, default=64, help="per-gpu batch size")
 
     # reproducibility
     parser.add_argument("--seed", type=int, default=42, help="seed for random, np, tf")
