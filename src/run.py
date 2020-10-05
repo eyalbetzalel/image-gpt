@@ -141,7 +141,7 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
 def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
     
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
-    
+    num_of_iter = num_of_iter.astype(int)
     samples = np.zeros([num_of_iter * n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
     
     for n in range(num_of_iter):
