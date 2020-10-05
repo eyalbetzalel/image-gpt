@@ -145,7 +145,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     samples_main = np.zeros([num_of_iter * n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
     
     for n in range(num_of_iter):
-        samples = np.zeros([num_of_iter * n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
+        samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
         for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
             np_gen_logits = sess.run(gen_logits, {X: samples})
             for j in range(n_gpu):
