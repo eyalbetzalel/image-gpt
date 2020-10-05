@@ -154,7 +154,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                 p = softmax(np_gen_logits[j][:, i, :], axis=-1)  # logits to probas
                 for k in range(n_sub_batch):
                     c = np.random.choice(n_vocab, p=p[k])  # choose based on probas
-                    samples[n * n_gpu * n_sub_batch + j * n_sub_batch + k, i] = c
+                    samples[j * n_sub_batch + k, i] = c
 
         # dequantize
         samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
