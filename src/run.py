@@ -45,6 +45,9 @@ def parse_arguments():
     # mode
     parser.add_argument("--eval", action="store_true", help="evaluates the model, requires a checkpoint and dataset")
     parser.add_argument("--sample", action="store_true", help="samples from the model, requires a checkpoint and clusters")
+    
+    # generate
+    parser.add_argument("--gen_dataset_size", type=int, default=128, help="per-gpu batch size")
 
     # reproducibility
     parser.add_argument("--seed", type=int, default=42, help="seed for random, np, tf")
@@ -135,28 +138,31 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
 
 
 # naive sampler without caching
-def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir):
-    samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
-
-    for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
-        np_gen_logits = sess.run(gen_logits, {X: samples})
-        for j in range(n_gpu):
-            p = softmax(np_gen_logits[j][:, i, :], axis=-1)  # logits to probas
-            for k in range(n_sub_batch):
-                c = np.random.choice(n_vocab, p=p[k])  # choose based on probas
-                samples[j * n_sub_batch + k, i] = c
+def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
     
-    # dequantize
-    samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
+    num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
+    
+    samples = np.zeros([num_of_iter * n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
+    
+    for n in range(num_of_iter):
+        for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
+            np_gen_logits = sess.run(gen_logits, {X: samples})
+            for j in range(n_gpu):
+                p = softmax(np_gen_logits[j][:, i, :], axis=-1)  # logits to probas
+                for k in range(n_sub_batch):
+                    c = np.random.choice(n_vocab, p=p[k])  # choose based on probas
+                    samples[n * n_gpu * n_sub_batch + j * n_sub_batch + k, i] = c
+
+        # dequantize
+        samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
 
     # write to png
-    for i in range(n_gpu * n_sub_batch):
+    for i in range(num_of_iter * n_gpu * n_sub_batch):
         imwrite(f"{args.save_dir}/sample_{i}.png", samples[i])
 
 
 def main(args):
     set_seed(args.seed)
-
     n_batch = args.n_sub_batch * args.n_gpu
 
     if args.data_path.endswith("cifar10"):
@@ -192,7 +198,7 @@ def main(args):
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
             clusters = np.load(args.color_cluster_path)
-            sample(sess, X, gen_logits, args.n_sub_batch, args.n_gpu, args.n_px, args.n_vocab, clusters, args.save_dir)
+            sample(sess, X, gen_logits, args.n_sub_batch, args.n_gpu, args.n_px, args.n_vocab, clusters, args.save_dir,args.gen_dataset_size)
 
 
 if __name__ == "__main__":
