@@ -142,10 +142,12 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
     num_of_iter = num_of_iter.astype(int)
-    samples_main = np.zeros([num_of_iter * n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
     
     for n in range(num_of_iter):
+        
+        curr_iter = n * n_gpu * n_sub_batch
         samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
+        
         for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
             np_gen_logits = sess.run(gen_logits, {X: samples})
             for j in range(n_gpu):
@@ -156,10 +158,11 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
 
         # dequantize
         samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
-        samples_main[n * n_gpu * n_sub_batch : (n+1) * n_gpu * n_sub_batch,:] = samples
+        
     # write to png
-    for i in range(num_of_iter * n_gpu * n_sub_batch):
-        imwrite(f"{args.save_dir}/sample_{i}.png", samples_main[i])
+        for i in range(n_gpu * n_sub_batch):
+            ind = curr_iter + i
+            imwrite(f"{args.save_dir}/sample_{i}.png", samples_main[ind])
 
 
 def main(args):
