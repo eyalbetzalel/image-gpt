@@ -167,7 +167,8 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
 
 def main(args):
     set_seed(args.seed)
-    n_batch = args.n_sub_batch * args.n_gpu
+    #n_batch = args.n_sub_batch * args.n_gpu
+    n_batch = 1
 
     if args.data_path.endswith("cifar10"):
         n_class = 10
