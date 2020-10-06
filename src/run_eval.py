@@ -195,9 +195,10 @@ def main(args):
 
         if args.eval:
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
-            import ipdb; ipdb.set_trace()
+            
             print("Evaluate Train")
-            evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
+            #evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
+            import ipdb; ipdb.set_trace()
             print("Evaluate Valid")
             evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
             print("Evaluate Test")
