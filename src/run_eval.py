@@ -132,6 +132,9 @@ def reduce_mean(gen_loss, clf_loss, tot_loss, accuracy, n_gpu):
 def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, permute=False):
     metrics = []
     for xmb, ymb in iter_data(evX, evY, n_batch=n_batch, truncate=True, verbose=True):
+        print(sess.run([gen_loss[0], clf_loss[0], accuracy[0]], {X: xmb, Y: ymb}))
+        print("xmb=" + str(xmb))
+        print("x=" str(X))
         metrics.append(sess.run([gen_loss[0], clf_loss[0], accuracy[0]], {X: xmb, Y: ymb}))
     eval_gen_loss, eval_clf_loss, eval_accuracy = [np.mean(m) for m in zip(*metrics)]
     print(f"{desc} gen: {eval_gen_loss:.4f} clf: {eval_clf_loss:.4f} acc: {eval_accuracy:.2f}")
@@ -194,8 +197,11 @@ def main(args):
 
         if args.eval:
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
+            print("Evaluate Train")
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
+            print("Evaluate Valid")
             evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
+            print("Evaluate Test")
             evaluate(sess, teX, teY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
 
         if args.sample:
