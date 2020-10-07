@@ -1,4 +1,7 @@
 import numpy as np
+from imageio import imwrite
+import os
+import argparse
 
 def parse_arguments():
 
@@ -18,7 +21,7 @@ def main(args):
   if not os.path.exists(args.save_path):
     os.makedirs(args.save_path)
   
-  for i in range(n_gpu * n_sub_batch):
+  for i in range(samples.shape[0]):
     ind = curr_iter + i
     imwrite(f"{args.save_path}/sample_{ind}.png", samples[i])
     set_seed(args.seed)
