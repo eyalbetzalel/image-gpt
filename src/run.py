@@ -151,6 +151,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
         
         for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
             np_gen_logits = sess.run(gen_logits, {X: samples})
+            ipdb.set_trace(context=5)
             for j in range(n_gpu):
                 p = softmax(np_gen_logits[j][:, i, :], axis=-1)  # logits to probas
                 for k in range(n_sub_batch):
