@@ -9,8 +9,8 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("--save_path", type=str, default="./save")
-    parser.add_argument("--load_path", type=str, default="./Generated.Samples.From.iGPT.npy")
+    parser.add_argument("--save_path", type=str, default="save")
+    parser.add_argument("--load_path", type=str, default="Generated.Samples.From.iGPT.npy")
     
     args = parser.parse_args()
     print("input args:\n", json.dumps(vars(args), indent=4, separators=(",", ":")))
