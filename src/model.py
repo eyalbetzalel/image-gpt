@@ -192,6 +192,7 @@ def model(hparams, X, Y=None, past=None, scope='model', reuse=False):
         h = norm(h, 'ln_f')
 
         # Generative loss.  Do tokens <n predict token n?
+        ipdb.set_trace(context=5)
         h_flat = tf.reshape(h, [batch*sequence, hparams.n_embd])
         gen_logits = tf.matmul(h_flat, wtet, transpose_b=True)
         gen_logits = tf.reshape(gen_logits, [batch, sequence, hparams.n_vocab])
