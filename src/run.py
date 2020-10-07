@@ -142,7 +142,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
     num_of_iter = num_of_iter.astype(int)
-    samples_matrix = numpy.zeros(shape=(num_of_iter * n_gpu * n_sub_batch,1024))
+    samples_matrix = np.zeros(shape=(num_of_iter * n_gpu * n_sub_batch,1024))
     
     for n in range(num_of_iter):
         
