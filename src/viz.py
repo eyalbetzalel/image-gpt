@@ -31,7 +31,7 @@ def main(args):
   
   for i in range(len(samples)):
     imwrite(f"{args.save_path}/sample_{i}.png", samples[i])
-    set_seed(args.seed)
+    
     
     
 if __name__ == "__main__":
