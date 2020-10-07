@@ -21,8 +21,9 @@ def main(args):
     
   import ipdb; ipdb.set_trace()  
   clusters = np.load(args.color_cluster_path)
-  samples = np.load(args.load_path)    
-  samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in np.hsplit(samples,1)[0]]
+  samples = np.load(args.load_path) 
+  samples = np.array(samples)  
+  samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
   
   if not os.path.exists(args.save_path):
     os.makedirs(args.save_path)
