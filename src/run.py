@@ -157,6 +157,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                     samples[j * n_sub_batch + k, i] = c
 
         # dequantize
+        import ipdb; ipdb.set_trace()
         samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
         
     # write to png
