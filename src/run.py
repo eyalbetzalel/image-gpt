@@ -159,7 +159,8 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                     
         samples_matrix[n * n_gpu * n_sub_batch : (n+1) * n_gpu * n_sub_batch,:] = samples
     
-    v=0
+    np.save('Generated.Samples.From.iGPT.npy',samples_matrix)
+    
         # dequantize
         
         # samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
