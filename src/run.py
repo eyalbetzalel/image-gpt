@@ -157,7 +157,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                     samples[j * n_sub_batch + k, i] = c
 
         # dequantize
-        import ipdb; ipdb.set_trace()
+        
         samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
         
     # write to png
@@ -203,6 +203,7 @@ def main(args):
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
             clusters = np.load(args.color_cluster_path)
+            import ipdb; ipdb.set_trace()
             sample(sess, X, gen_logits, args.n_sub_batch, args.n_gpu, args.n_px, args.n_vocab, clusters, args.save_dir,args.gen_dataset_size)
 
 
