@@ -142,6 +142,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
     num_of_iter = num_of_iter.astype(int)
+    samples_matrix = numpy.zeros(shape=(num_of_iter * n_gpu * n_sub_batch,1024))
     
     for n in range(num_of_iter):
         
@@ -155,16 +156,19 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                 for k in range(n_sub_batch):
                     c = np.random.choice(n_vocab, p=p[k])  # choose based on probas
                     samples[j * n_sub_batch + k, i] = c
-
+                    
+        samples_matrix[n * n_gpu * n_sub_batch : (n+1) * n_gpu * n_sub_batch,:] = samples
+    
+    v=0
         # dequantize
         
-        samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
+        # samples = [np.reshape(np.rint(127.5 * (clusters[s] + 1.0)), [32, 32, 3]).astype(np.uint8) for s in samples]
         
     # write to png
-        for i in range(n_gpu * n_sub_batch):
-            ind = curr_iter + i
-            imwrite(f"{args.save_dir}/sample_{ind}.png", samples[i])
-
+        #for i in range(n_gpu * n_sub_batch):
+            #ind = curr_iter + i
+            #imwrite(f"{args.save_dir}/sample_{ind}.png", samples[i])
+        
 
 def main(args):
     set_seed(args.seed)
