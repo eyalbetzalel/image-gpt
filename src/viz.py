@@ -30,8 +30,7 @@ def main(args):
     os.makedirs(args.save_path)
   
   for i in range(len(samples)):
-    ind = curr_iter + i
-    imwrite(f"{args.save_path}/sample_{ind}.png", samples[i])
+    imwrite(f"{args.save_path}/sample_{i}.png", samples[i])
     set_seed(args.seed)
     
     
