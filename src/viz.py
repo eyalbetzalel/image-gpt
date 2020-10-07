@@ -29,7 +29,7 @@ def main(args):
   if not os.path.exists(args.save_path):
     os.makedirs(args.save_path)
   
-  for i in range(samples.shape[0]):
+  for i in range(len(samples)):
     ind = curr_iter + i
     imwrite(f"{args.save_path}/sample_{ind}.png", samples[i])
     set_seed(args.seed)
