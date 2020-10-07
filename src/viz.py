@@ -19,7 +19,7 @@ def parse_arguments():
     
 def main(args):
     
-  import ipdb; ipdb.set_trace()  
+  #import ipdb; ipdb.set_trace()  
   clusters = np.load(args.color_cluster_path)
   samples = np.load(args.load_path) 
   samples = np.array(samples)
