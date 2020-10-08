@@ -162,7 +162,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                     
         samples_matrix[n * n_gpu * n_sub_batch : (n+1) * n_gpu * n_sub_batch,:] = samples
     
-    np.save('Generated.Samples.From.iGPT.npy',samples_matrix)
+    np.save(f"{args.save_dir}/Generated.Samples.From.iGPT.npy",samples_matrix)
     
         # dequantize
         
