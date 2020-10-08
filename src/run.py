@@ -145,7 +145,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     samples_matrix = np.zeros(shape=(num_of_iter * n_gpu * n_sub_batch,1024))
     
     for n in range(num_of_iter):
-        
+        import ipdb; ipdb.set_trace(context=5)
         curr_iter = n * n_gpu * n_sub_batch
         samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
         
@@ -153,6 +153,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
             np_gen_logits = sess.run(gen_logits, {X: samples})
             
             for j in range(n_gpu):
+                
                 p = softmax(np_gen_logits[j][:, i, :], axis=-1)  # logits to probas
                 for k in range(n_sub_batch):
                     c = np.random.choice(n_vocab, p=p[k])  # choose based on probas
