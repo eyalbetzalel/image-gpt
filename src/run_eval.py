@@ -131,6 +131,7 @@ def reduce_mean(gen_loss, clf_loss, tot_loss, accuracy, n_gpu):
 
 def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, permute=False):
     metrics = []
+    import ipdb; ipdb.set_trace(context=5)
     for xmb, ymb in iter_data(evX, evY, n_batch=n_batch, truncate=True, verbose=True):
         metrics.append(sess.run([gen_loss[0], clf_loss[0], accuracy[0]], {X: xmb, Y: ymb}))
     eval_gen_loss, eval_clf_loss, eval_accuracy = [np.mean(m) for m in zip(*metrics)]
