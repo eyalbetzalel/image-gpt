@@ -138,7 +138,7 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
 
 
 # naive sampler without caching
-def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
+def sample(sess, X, Y, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
     
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
     num_of_iter = num_of_iter.astype(int)
@@ -148,9 +148,11 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
         import ipdb; ipdb.set_trace(context=5)
         curr_iter = n * n_gpu * n_sub_batch
         samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
-        
+        ymb = np.zeros([n_gpu * n_sub_batch, 1000], dtype=np.int32)
+        ymb[:,1] = 1
         for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
-            np_gen_logits = sess.run(gen_logits, {X: samples})
+            #np_gen_logits = sess.run(gen_logits, {X: samples})
+            np_gen_logits = sess.run(gen_logits, {X: samples, Y: ymb})
             
             for j in range(n_gpu):
                 
@@ -210,7 +212,7 @@ def main(args):
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
             clusters = np.load(args.color_cluster_path)
-            sample(sess, X, gen_logits, args.n_sub_batch, args.n_gpu, args.n_px, args.n_vocab, clusters, args.save_dir,args.gen_dataset_size)
+            sample(sess, X, Y, gen_logits, args.n_sub_batch, args.n_gpu, args.n_px, args.n_vocab, clusters, args.save_dir,args.gen_dataset_size)
 
 
 if __name__ == "__main__":
