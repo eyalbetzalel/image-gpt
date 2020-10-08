@@ -145,7 +145,6 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
     samples_matrix = np.zeros(shape=(num_of_iter * n_gpu * n_sub_batch,1024))
     
     for n in range(num_of_iter):
-        import ipdb; ipdb.set_trace(context=5)
         curr_iter = n * n_gpu * n_sub_batch
         samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
         ymb = np.zeros([n_gpu * n_sub_batch, 1000], dtype=np.int32)
