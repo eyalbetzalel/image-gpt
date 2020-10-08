@@ -200,15 +200,31 @@ def main(args):
         saver.restore(sess, args.ckpt_path)
 
         if args.eval:
-            (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
+            
+            # Load old images (ImageNet set): 
+            
+            # (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
+            
+            # Load new images (Generated set) : 
+            
+            gX = np.load('Generated.Samples.From.iGPT.npy')
+            gY = np.zeros(sX.shape[0])
+            
+            # For prototyping : 
+            
+            trX = gX
+            trY = gY
             
             print("Evaluate Train")
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
-            print("Evaluate Valid")
-            evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
-            print("Evaluate Test")
-            evaluate(sess, teX, teY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
-
+            
+            #print("Evaluate Valid")
+            #evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
+            #print("Evaluate Test")
+            #evaluate(sess, teX, teY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
+            
+            # TODO : Split the set to Train, Test and Validation - and measure LOSS for each seperatly 
+            
         if args.sample:
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
