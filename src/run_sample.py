@@ -142,7 +142,7 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
 def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
     
     with h5py.File(f"{save_dir}/Generated.Samples.From.iGPT.h5", "a") as hdf:
-        dset = hdf.create_dataset('generated_samples', (1,1024), dtype='f', maxshape=(None,))
+        dset = hdf.create_dataset('generated_samples', (1,1024), dtype='f', maxshape=(None,1024))
     
 
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
