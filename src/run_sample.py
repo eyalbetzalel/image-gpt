@@ -5,6 +5,7 @@ import os
 import random
 import sys
 import time
+import h5py
 
 import numpy as np
 import tensorflow as tf
@@ -140,6 +141,10 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
 # naive sampler without caching
 def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
     
+    with h5py.File(f"{save_dir}/Generated.Samples.From.iGPT.h5", "a") as hdf:
+        dset = hdf.create_dataset('generated_samples', maxshape=(None,))
+    
+
     num_of_iter = np.floor(gen_dataset_size/(n_gpu * n_sub_batch))
     num_of_iter = num_of_iter.astype(int)
     samples_matrix = np.zeros(shape=(num_of_iter * n_gpu * n_sub_batch,1024))
@@ -149,20 +154,20 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
         samples = np.zeros([n_gpu * n_sub_batch, n_px * n_px], dtype=np.int32)
         ymb = np.zeros([n_gpu * n_sub_batch, 1000], dtype=np.int32)
         ymb[:,1] = 1
+        
         for i in tqdm(range(n_px * n_px), ncols=80, leave=False):
             np_gen_logits = sess.run(gen_logits, {X: samples})
             
-            
             for j in range(n_gpu):
-                
                 p = softmax(np_gen_logits[j][:, i, :], axis=-1)  # logits to probas
+                
                 for k in range(n_sub_batch):
                     c = np.random.choice(n_vocab, p=p[k])  # choose based on probas
                     samples[j * n_sub_batch + k, i] = c
                     
-        samples_matrix[n * n_gpu * n_sub_batch : (n+1) * n_gpu * n_sub_batch,:] = samples
-    
-    np.save(f"{args.save_dir}/Generated.Samples.From.iGPT.npy",samples_matrix)
+        with h5py.File(f"{save_dir}/Generated.Samples.From.iGPT.h5", "a") as hdf:
+            hdf["generated_samples"].resize((hdf["generated_samples"].shape[0] + samples.shape[0]), axis = 0)
+            hdf["X_train"][-samples.shape[0]:] = samples
     
         # dequantize
         
@@ -211,6 +216,9 @@ def main(args):
             if not os.path.exists(args.save_dir):
                 os.makedirs(args.save_dir)
             clusters = np.load(args.color_cluster_path)
+            
+            
+            
             sample(sess, X, gen_logits, args.n_sub_batch, args.n_gpu, args.n_px, args.n_vocab, clusters, args.save_dir,args.gen_dataset_size)
 
 
