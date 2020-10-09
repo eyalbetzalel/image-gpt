@@ -167,7 +167,7 @@ def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, sav
                     
         with h5py.File(f"{save_dir}/Generated.Samples.From.iGPT.h5", "a") as hdf:
             hdf["generated_samples"].resize((hdf["generated_samples"].shape[0] + samples.shape[0]), axis = 0)
-            hdf["X_train"][-samples.shape[0]:] = samples
+            hdf["generated_samples"][-samples.shape[0]:] = samples
     
         # dequantize
         
