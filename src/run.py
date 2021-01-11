@@ -8,7 +8,7 @@ import time
 
 import numpy as np
 import tensorflow as tf
-tf.enable_eager_execution()
+
 
 
 from imageio import imwrite
@@ -132,6 +132,7 @@ def reduce_mean(gen_loss, clf_loss, tot_loss, accuracy, n_gpu):
 
 
 def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, permute=False):
+    tf.enable_eager_execution()
     metrics = []
     arr_len = evX.shape[0] + 1
     arr = np.empty((0, arr_len), float)
