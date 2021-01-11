@@ -208,9 +208,6 @@ def main(args):
 
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
 
-            print(sess.run(tf.convert_to_tensor(trX)))
-            print(sess.run(tf.convert_to_tensor(trY)))
-
             print(sess.run(trX.shape))
             print(sess.run(trY.shape))
 
