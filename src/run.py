@@ -216,7 +216,12 @@ def main(args):
             from gmpm import train
             from gmpm import test
 
-            print(sess.run(str(train.shape)))  # '(1231230, 1024)'
+            trainX = train
+            trainY = np.eye(1000)[np.random.choice(1000, train.shape[0])]
+
+            print(sess.run(str(trainY.shape)))
+            #print(sess.run(str(trainX.shape)))  # (13249, 1024)
+
 
 
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
