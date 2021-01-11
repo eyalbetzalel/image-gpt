@@ -208,7 +208,7 @@ def main(args):
 
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
 
-            print(sess.run(str(trX.shape)))
+            # print(sess.run(str(trX.shape)))
             print(sess.run(str(trY.shape)))
 
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
