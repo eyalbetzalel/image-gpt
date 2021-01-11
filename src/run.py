@@ -196,15 +196,15 @@ def main(args):
     reduce_mean(gen_loss, clf_loss, tot_loss, accuracy, args.n_gpu)
 
     saver = tf.train.Saver(var_list=[tp for tp in trainable_params if not 'clf' in tp.name])
+
+    print(" --- start tf ---")
+
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)) as sess:
         sess.run(tf.global_variables_initializer())
 
         saver.restore(sess, args.ckpt_path)
 
         if args.eval:
-
-
-
 
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
 
