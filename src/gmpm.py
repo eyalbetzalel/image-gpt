@@ -23,7 +23,7 @@ def load_h5_dataset(directory):
             continue
     data_flat = [item for sublist in data for item in sublist]
     data_flat = np.stack(data_flat, axis=0)
-    precent_train_test_split = 0.7
+    precent_train_test_split = 0.01
     train = data_flat[:int(np.floor(precent_train_test_split * data_flat.shape[0])), :]
     test = data_flat[int(np.floor(precent_train_test_split * data_flat.shape[0])) + 1:, :]
     print(" --------------------------------- ")

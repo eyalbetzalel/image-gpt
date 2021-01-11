@@ -219,7 +219,7 @@ def main(args):
             from gmpm import train
             from gmpm import test
 
-            trainX = train[10,:]
+            trainX = train
             trainY = np.eye(1000)[np.random.choice(1000, trainX.shape[0])]
 
             # print(sess.run(str(trainY.shape))) # '(13249, 1000)'
