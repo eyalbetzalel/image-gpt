@@ -209,8 +209,15 @@ def main(args):
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
 
             # print(sess.run(str(trX.shape))) # '(1231230, 1024)'
-            # print(sess.run(str(trY.shape))) # '(1231230, 1000)'
-            print(sess.run(str(trY[1, :])))
+            # print(sess.run(str(trY.shape))) # '(1231230, 1000)' - One Hot Vector ndarray
+
+            # Create load function that can load generated data as npy file :
+
+            from gmpm import train
+            from gmpm import test
+
+            print(sess.run(str(train.shape)))  # '(1231230, 1024)'
+
 
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
             evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
@@ -218,10 +225,9 @@ def main(args):
 
             ######
 
-            # Create load function that can load generated data as npy file :
 
-            from gmpm import train
-            from gmpm import test
+
+
 
 
             # Create evaluate function that can evaluate them :
