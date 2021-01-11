@@ -31,6 +31,6 @@ def load_h5_dataset(directory):
 
     return train, test
 
-directory = "/home/dsi/eyalbetzalel/image-gpt/raw_dataset_h5/"
+directory = "./"
 
 train, test = load_h5_dataset(directory)
