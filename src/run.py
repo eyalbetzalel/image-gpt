@@ -9,8 +9,6 @@ import time
 import numpy as np
 import tensorflow as tf
 
-
-
 from imageio import imwrite
 from scipy.special import softmax
 from tensorflow.contrib.training import HParams
@@ -132,21 +130,19 @@ def reduce_mean(gen_loss, clf_loss, tot_loss, accuracy, n_gpu):
 
 
 def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, permute=False):
-    tf.enable_eager_execution()
     metrics = []
-    arr_len = evX.shape[0] + 1
-    arr = np.empty((0, arr_len), float)
+    xmb_list = []
     for xmb, ymb in iter_data(evX, evY, n_batch=n_batch, truncate=True, verbose=True):
         metrics.append(sess.run([gen_loss[0], clf_loss[0], accuracy[0]], {X: xmb, Y: ymb}))
-        temp = np.concatenate(xmb,gen_loss[0].numpy())
-        arr = np.vstack(arr, temp)
+        xmb_list.append(xmb)
     eval_gen_loss, eval_clf_loss, eval_accuracy = [np.mean(m) for m in zip(*metrics)]
     print(f"{desc} gen: {eval_gen_loss:.4f} clf: {eval_clf_loss:.4f} acc: {eval_accuracy:.2f}")
 
-    with open('test.npy', 'wb') as f:
-        np.save(f, arr)
 
-
+    np_metrics = np.array(metrics)
+    np_xmb_list = np.array(xmb_list)
+    np.save('LossResults.npy', np_metrics)
+    np.save('data.npy',np_xmb_list)
 
 
 # naive sampler without caching
