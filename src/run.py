@@ -202,10 +202,27 @@ def main(args):
         saver.restore(sess, args.ckpt_path)
 
         if args.eval:
+
+            import ipdb; ipdb.set_trace()
+
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
             evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
             evaluate(sess, teX, teY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
+
+            ######
+
+            # Create load function that can load generated data as npy file :
+
+            from gmpm import train
+            from gmpm import test
+
+
+            # Create evaluate function that can evaluate them :
+
+            # Save it in pickle format that is similar to pixelsnail format:
+
+
 
         if args.sample:
             if not os.path.exists(args.save_dir):
