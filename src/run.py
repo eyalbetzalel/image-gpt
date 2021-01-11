@@ -203,9 +203,17 @@ def main(args):
 
         if args.eval:
 
-            print('test123')
+
+
 
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
+
+            print(sess.run(trX))
+            print(sess.run(trY))
+
+            print(sess.run(trX.shape))
+            print(sess.run(trY.shape))
+
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
             evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
             evaluate(sess, teX, teY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
