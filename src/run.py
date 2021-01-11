@@ -203,7 +203,7 @@ def main(args):
 
         if args.eval:
 
-            import ipdb; ipdb.set_trace()
+            print('test123')
 
             (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
             evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
