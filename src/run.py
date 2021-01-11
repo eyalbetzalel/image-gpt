@@ -219,8 +219,9 @@ def main(args):
             trainX = train
             trainY = np.eye(1000)[np.random.choice(1000, train.shape[0])]
 
-            print(sess.run(str(trainY.shape)))
+            # print(sess.run(str(trainY.shape))) # '(13249, 1000)'
             #print(sess.run(str(trainX.shape)))  # (13249, 1024)
+            evaluate(sess, trainX, trainY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
 
 
 
