@@ -141,9 +141,12 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
 
     np_metrics = np.array(metrics)
     np_xmb_list = np.array(xmb_list)
-    np.save('LossResults.npy', np_metrics)
-    np.save('data.npy',np_xmb_list)
 
+    nlloss = np_metrics[:, 0]
+    np_xmb_list = np.squeeze(np_xmb_list)
+    res = np.column_stack((np_xmb_list, nlloss))
+
+    np.save('FullossResults.npy', res)
 
 # naive sampler without caching
 def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
