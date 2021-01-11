@@ -8,6 +8,8 @@ import time
 
 import numpy as np
 import tensorflow as tf
+tf.enable_eager_execution()
+
 
 from imageio import imwrite
 from scipy.special import softmax
