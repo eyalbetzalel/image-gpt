@@ -145,8 +145,8 @@ def evaluate(sess, evX, evY, X, Y, gen_loss, clf_loss, accuracy, n_batch, desc, 
     nlloss = np_metrics[:, 0]
     np_xmb_list = np.squeeze(np_xmb_list)
     res = np.column_stack((np_xmb_list, nlloss))
-
-    np.save('FullossResults.npy', res)
+    fname = "FullossResults_" + desc + ".npy"
+    np.save(fname, res)
 
 # naive sampler without caching
 def sample(sess, X, gen_logits, n_sub_batch, n_gpu, n_px, n_vocab, clusters, save_dir, gen_dataset_size):
@@ -217,7 +217,7 @@ def main(args):
 
         if args.eval:
 
-            (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
+            # (trX, trY), (vaX, vaY), (teX, teY) = load_data(args.data_path)
 
             # print(sess.run(str(trX.shape))) # '(1231230, 1024)'
             # print(sess.run(str(trY.shape))) # '(1231230, 1000)' - One Hot Vector ndarray
@@ -229,29 +229,14 @@ def main(args):
 
             trainX = train
             trainY = np.eye(1000)[np.random.choice(1000, trainX.shape[0])]
+            testX = test
+            testY = np.eye(1000)[np.random.choice(1000, testX.shape[0])]
 
             # print(sess.run(str(trainY.shape))) # '(13249, 1000)'
-            #print(sess.run(str(trainX.shape)))  # (13249, 1024)
-            evaluate(sess, trainX, trainY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
+            # print(sess.run(str(trainX.shape)))  # (13249, 1024)
 
-
-
-            evaluate(sess, trX[:len(vaX)], trY[:len(vaY)], X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
-            evaluate(sess, vaX, vaY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "valid")
-            evaluate(sess, teX, teY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
-
-            ######
-
-
-
-
-
-
-            # Create evaluate function that can evaluate them :
-
-            # Save it in pickle format that is similar to pixelsnail format:
-
-
+            evaluate(sess, trainX, trainY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "train")
+            evaluate(sess, testX, testY, X, Y, gen_loss, clf_loss, accuracy, n_batch, "test")
 
         if args.sample:
             if not os.path.exists(args.save_dir):

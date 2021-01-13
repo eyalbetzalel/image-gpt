@@ -17,13 +17,13 @@ def load_h5_dataset(directory):
                 # Get the data
                 temp = list(f[a_group_key])
                 data.append(temp[1:])
-                flagOneFile = 1
+                flagOneFile = 0
             continue
         else:
             continue
     data_flat = [item for sublist in data for item in sublist]
     data_flat = np.stack(data_flat, axis=0)
-    precent_train_test_split = 0.01
+    precent_train_test_split = 0.5
     train = data_flat[:int(np.floor(precent_train_test_split * data_flat.shape[0])), :]
     test = data_flat[int(np.floor(precent_train_test_split * data_flat.shape[0])) + 1:, :]
     print(" --------------------------------- ")
